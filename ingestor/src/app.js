@@ -7,7 +7,7 @@ const port = 3000;
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  return res.send('Hello world!');
+  return res.send('Ingestor Service is up and running!!');
 });
 
 app.use('/health_check', require('./api/health_check/routes'));

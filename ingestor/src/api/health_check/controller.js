@@ -37,15 +37,13 @@ module.exports.list_topics = async (req, res) => {
 
 module.exports.health_check = async (req, res) => {
     try {
-        console.log(process.env.KAFKA_TOPIC);
-        const list_topics = await admin.listTopics();
-        console.log(list_topics);
-        if(list_topics.includes(process.env.KAFKA_TOPIC))
-            return res.send("OK");
-        else
-            throw new Error("Kafka Topic not found");
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ error: error.message });
-    }
+        await admin.connect();
+        const metadata = await admin.describeCluster();
+        console.log('Connected to Kafka cluster:', metadata);
+        return res.send({ message: 'Connected to Kafka cluster', metadata });
+
+      } catch (error) {
+        console.error('Error connecting to Kafka:', error.message);
+        return res.status(500).send({ error: error.message });
+      }
 };
