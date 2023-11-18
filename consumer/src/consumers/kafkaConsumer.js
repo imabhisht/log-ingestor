@@ -4,10 +4,16 @@ const { saveToElasticsearch } = require('../services/elasticsearchService');
 
 let KAFKA_BROKER_NUMBERS = process.env.KAFKA_BROKER_NUMBERS || "1";
 let brokers = [];
+let KAFKA_HOSTNAME = process.env.KAFKA_HOSTNAME || "localhost";
 for (let i = 0; i < parseInt(KAFKA_BROKER_NUMBERS); i++) {
-    brokers.push(`localhost:909${i+2}`);
+  if (KAFKA_HOSTNAME != "localhost"){
+    brokers.push(`${KAFKA_HOSTNAME}${i+1}:${19092+i}`);
+    continue;
+  }
+  brokers.push(`localhost:${9092+i}`);
 }
 console.log("Number of brokers: ", KAFKA_BROKER_NUMBERS);
+console.log("Brokers: ", brokers);
 
 const kafka = new Kafka({
   clientId: 'Producer_1',
