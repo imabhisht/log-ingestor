@@ -15,7 +15,7 @@ Technology I Used:
  - Apache Kafka
  - Elastic Search (Also added Full Text Search Capabilities)
  - Docker 
- - HTML/JS for UI (Still under development, but API's are working)
+ - HTML/JS for UI (Still under development, but API's are working.)
 
    
     
