@@ -1,8 +1,17 @@
 const baseURL = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
 let spinner_element;
 let query_config = {
-    "level": ""
+    "level": "",
+    "resource_id": "",
+    "trace_id": "",
+    "span_id": "",
+    "parent_resource_id": "",
+    "commit": "",
+    "message": "",
+    "start_time":"",
+    "end_time":""
 }
+
 
 function addRowsToTable(data) {
     const tableBody = document.getElementById('tableBody');
@@ -49,7 +58,7 @@ function addRowsToTable(data) {
 
 function addRows_To_Table(data) {
     const tableBody = document.getElementById('t-data');
-    console.log("At ADD ROWS",data)
+    console.log("At ADD ROWS", data)
     tableBody.innerHTML = `
     <tr id="loading_spinner">
     </tr>
@@ -84,12 +93,14 @@ function addRows_To_Table(data) {
                 <a href="">${(item._source.spanId)}</a>
             </td>
             <td class="px-6 py-4">
-            ${
-                item._source.level === "error" ? `<button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-xs px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Error</button>`
+            ${item._source.level === "error" ? `<button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-xs px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Error</button>`
                 : item._source.level === "info"
-                ? `<button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Info</button>`
-                : `<button type="button" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-xs px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900">Warning</button>`
+                    ? `<button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xs px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Info</button>`
+                    : `<button type="button" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-xs px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900">Warning</button>`
             }
+            </td>
+            <td class="px-6 py-4">
+                <a href="">${((item._source.message).length > 30) ? ((item._source.message).slice(0,30) + "..." ): item._source.message}</a>
             </td>
             <td class="px-6 py-4">
                 <a href="">${(formattedText)}</a>
@@ -104,7 +115,7 @@ function addRows_To_Table(data) {
 async function fetchListOfAllData() {
     try {
 
-        
+
         const response = await fetch(`${baseURL}/search`);
         if (response.ok) {
             const data = await response.json();
@@ -131,15 +142,16 @@ async function fetchSearchData() {
 
         // Add query parameters from query_config
         Object.keys(query_config).forEach(key => {
-        if (query_config[key] !== "") {
-            url.searchParams.append(key, query_config[key]);
-        }})
+            if (query_config[key] !== "") {
+                url.searchParams.append(key, query_config[key]);
+            }
+        })
 
         const response = await fetch(url);
         if (response.ok) {
             const data = await response.json();
             // Process the data here
-            console.log("Fetched: ",data);
+            console.log("Fetched: ", data);
             addRows_To_Table(data);
             // return data;
         } else {
@@ -154,11 +166,11 @@ async function fetchSearchData() {
 
 
 document.addEventListener("DOMContentLoaded", async function () {
-    
+
     spinner_element = document.getElementById('loading_spinner');
     // spinner_element.style.display = "block";
     apiData = await fetchListOfAllData();
-    console.log("This is Data",apiData)
+    console.log("This is Data", apiData)
     addRows_To_Table(apiData);
 
     const dropdownActionButton = document.getElementById('dropdownActionButton');
@@ -166,30 +178,30 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Add click event listener to the dropdown button
     dropdownActionButton.addEventListener('click', function () {
-      dropdownAction.classList.toggle('hidden');
+        dropdownAction.classList.toggle('hidden');
     });
 
     // Add click event listeners to each dropdown item
     const dropdownItems = dropdownAction.querySelectorAll('a');
     dropdownItems.forEach(function (item) {
-      item.addEventListener('click', function () {
-        // Get the text content of the clicked item
-        const selectedItemText = item.textContent.trim();
-        
-        // Call your JavaScript function with the selected item text
-        handleDropdownItemClick(selectedItemText);
-        console.log(query_config)
-        // Close the dropdown
-        dropdownAction.classList.add('hidden');
-      });
+        item.addEventListener('click', function () {
+            // Get the text content of the clicked item
+            const selectedItemText = item.textContent.trim();
+
+            // Call your JavaScript function with the selected item text
+            handleDropdownItemClick(selectedItemText);
+            console.log(query_config)
+            // Close the dropdown
+            dropdownAction.classList.add('hidden');
+        });
     });
 
     // Your JavaScript function to handle dropdown item click
     function handleDropdownItemClick(selectedItemText) {
-      console.log('Item clicked:', selectedItemText);
-      query_config["level"] = selectedItemText.toLowerCase();
-      fetchSearchData()
-      // Add your logic here to perform actions based on the clicked item
+        console.log('Item clicked:', selectedItemText);
+        query_config["level"] = selectedItemText.toLowerCase();
+        fetchSearchData()
+        // Add your logic here to perform actions based on the clicked item
     }
 
 
@@ -231,7 +243,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
-async function searchAnything(value){
+async function searchAnything(value) {
     try {
         spinner_element = document.getElementById('loading_spinner');
         spinner_element.style.display = "block";
@@ -246,7 +258,7 @@ async function searchAnything(value){
         if (response.ok) {
             const data = await response.json();
             // Process the data here
-            console.log("Fetched: ",data);
+            console.log("Fetched: ", data);
             addRows_To_Table(data);
             // return data;
         } else {
@@ -259,27 +271,41 @@ async function searchAnything(value){
     }
 }
 
+function handleKeyPress(event, inputId) {
+    if (event.key === "Enter") {
+        event.preventDefault(); // Prevent form submission
+        var valueofinput = document.getElementById(inputId).value;
+        switch (inputId) {
+            case 'resource-id-input':
+                query_config["resource_id"] = valueofinput
+                break;
+            case 'trace-id-input':
+                query_config["trace_id"] = valueofinput
+                break;
+            case 'span-id-input':
+                query_config["span_id"] = valueofinput
+                break;
+            case 'parent-resource-id-input':
+                query_config["parent_resource_id"] = valueofinput
+                break;
+            case 'commit-input':
+                query_config["commit"] = valueofinput
+                break;
+            case 'message-input':
+                query_config["message"] = valueofinput
+                break;
+            case 'start-time-input':
+                query_config["start_time"] = valueofinput
+                break;
+            case 'end-time-input':
+                query_config["end_time"] = valueofinput
+                break;
 
-async function getURLInfo(url_to_scrap) {
-    try {
-      const response = await fetch(`${baseURL}/scrap-url`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // Set the content type to JSON
-        },
-        body: JSON.stringify({
-            url: url_to_scrap,
-        }), // Convert the data to JSON format
-      });
-  
-      if (response.ok) {
-        const responseData = await response.json(); // Parse the response as JSON
-        console.log('Response:', responseData);
-        return responseData;
-      } else {
-        throw new Error('Request failed.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
+            default:
+                break;
+
+        }
+        fetchSearchData()
     }
-  }
+}
+
