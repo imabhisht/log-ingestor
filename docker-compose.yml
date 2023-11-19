@@ -15,6 +15,7 @@ services:
           memory: 2GB
     networks:
       - ingestor-network
+    restart: always
 
   zoo1:
     image: confluentinc/cp-zookeeper:7.3.2
@@ -26,6 +27,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_SERVERS: zoo1:2888:3888
+    restart: always
     networks:
       - ingestor-network
 
@@ -51,6 +53,7 @@ services:
       - zoo1
     networks:
       - ingestor-network
+    restart: always
 
   kafka2:
     image: confluentinc/cp-kafka:7.3.2
@@ -76,6 +79,8 @@ services:
     networks:
       - ingestor-network
 
+    restart: always
+
   ingestor:
     build: 
       context: ./ingestor
@@ -90,6 +95,7 @@ services:
       - zoo1
     networks:
       - ingestor-network
+    restart: always
 
   consumer:
     build: 
@@ -106,6 +112,7 @@ services:
       - ingestor
     networks:
       - ingestor-network
+    restart: always
 
 networks:
   ingestor-network: 
