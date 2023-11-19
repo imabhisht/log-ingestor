@@ -114,6 +114,26 @@ services:
       - ingestor-network
     restart: always
 
+  query:
+    build: 
+      context: ./query
+    image: query
+    container_name: query
+    ports:
+      - "3002:3002"
+      - "3005:3002"
+      - "5017:5017"
+    depends_on:
+      - kafka1
+      - kafka2
+      - es
+      - zoo1
+      - ingestor
+      - consumer
+    networks:
+      - ingestor-network
+    restart: always
+
 networks:
   ingestor-network: 
     
