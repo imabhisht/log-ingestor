@@ -1,13 +1,16 @@
 # Log Ingestor and Query Interface
 
-by abhishtchouhan@gmail.com
+Submission by abhishtchouhan@gmail.com. Same email used while applying on Career Portal
 
-**How to Run:**
+**How to Run**
 
  - First run all the Docker Contianers:
  `sudo sh start.sh`
  - Run Python Query App (Install all dependencies first)
  `python3 query/app.py`
+
+    
+
  
 ## **How to Operate**
 - There is a file `dummy_dataset_injector.py` which will add dummy dataset for testing. 
@@ -42,6 +45,7 @@ by abhishtchouhan@gmail.com
 
 ## System Design
 ![HLSD](submission/i_1.png)
+
 ### Components:
 
 1.  **Express Log Ingestor:**
@@ -110,3 +114,41 @@ This system design leverages the strengths of Kafka for efficient message queuin
 
 
 
+
+**API's References**
+
+    [GET] http://localhost:3000/health_check 
+
+
+    [POST] http://localhost:3000/logger
+    BODY RAW JSON: 
+    {
+	"level": "error",
+	"message": "Failed to connect to DB",
+    "resourceId": "server-1234",
+	"timestamp": "2023-09-15T08:00:00Z",
+	"traceId": "abc-xyz-123",
+    "spanId": "span-456",
+    "commit": "5e5342f",
+    "metadata": {
+        "parentResourceId": "server-0987"
+    }}
+
+    [GET] http://localhost:3002/search
+    PARMS:
+    -> base_search (fix "*" search with 10 rows limit)
+    -> q (to search anything,full text search)
+    
+    -> Multi-Param Search (Add them as parameters; using multiple simultaneously will enable searching with multiple criteria.)
+    level
+    start_time
+    end_time
+    trace_id
+    span_id
+    parent_resource_id
+    commit
+    resource_id
+    message
+    
+
+    
