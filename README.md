@@ -13,7 +13,8 @@ Submission by abhishtchouhan@gmail.com. Same email used while applying on Career
 - All logs can be Injected from  ` [POST] http://localhost:3000/logger `
  Read the API References before Proceeding.
 
-    
+
+![Sample UI](submission/i_2.png)
 
  
 ## **How to Operate**
