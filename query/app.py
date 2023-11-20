@@ -90,5 +90,5 @@ def search():
 
 if __name__ == '__main__':  
     API_PORT = os.getenv('QUERY_API_PORT') or 3002
-    app.run(debug=True, port=int(API_PORT))
+    app.run(debug=True, host="0.0.0.0", port=int(API_PORT))
 

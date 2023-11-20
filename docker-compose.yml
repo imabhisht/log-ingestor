@@ -121,8 +121,6 @@ services:
     container_name: query
     ports:
       - "3002:3002"
-      - "3005:3002"
-      - "5017:5017"
     depends_on:
       - kafka1
       - kafka2

@@ -4,17 +4,22 @@ Submission by abhishtchouhan@gmail.com. Same email used while applying on Career
 
 **How to Run**
 
- - First run all the Docker Contianers:
- `sudo sh start.sh`
- - Run Python Query App (Install all dependencies first)
- `python3 query/app.py`
+- First run all the Docker Contianers: `sudo sh start.sh`
+
+- ~~Run Python Query App (Install all dependencies first)
+`python3 query/app.py`~~ (Update: Fixed the Issue)
+
+- Go to http://localhost:3002, the UI will be loaded (Read the Operator Guider before Proceeding)
+- All logs can be Injected from  ` [POST] http://localhost:3000/logger `
+ Read the API References before Proceeding.
 
     
 
  
 ## **How to Operate**
 - There is a file `dummy_dataset_injector.py` which will add dummy dataset for testing. 
- -  All major services will take some time and use atlest 8GiB of Memory during Startup.
+ - All major services will take some time and use atlest 8GiB of Memory during Startup. Its a **MicroService Architecture**, so running all standalone services in one machine will eat up some memory.
+
  - Go to http://localhost:3002, the UI will be loaded
  - There is one main big serach box, where you can search anything, and enjoy the power of Elastic Search
  - There are other search boxes with individual parameters; simply input values into each of them, and the results will dynamically change. This feature empowers you to apply multiple parameters simultaneously.
@@ -36,9 +41,17 @@ Submission by abhishtchouhan@gmail.com. Same email used while applying on Career
 **Things to know :**
 
  1. Ignoring RBAC as i'm short on Time. Refer my: [RBAC Repo](https://github.com/imabhisht/edtech-management)
- 2. I didn't add a **calendar** or **time picke**r because my CSS skills are not strong, and the messy CSS was not aesthetically pleasing. Therefore, if you need to query, please enter the **full timestamp** from start to end on both input box respectively. [Format: "2023-09-10T00:00:00Z" ]
- 3. The Last Query Docker Container was not connecting with Host machine, i dont know why. I will figure that out soon, for meantime run the Query Server using `python3 query/app.py.`
- 4. Yea that's it. Not got much time, but tired my best to submit this assignment. Contact me incase any issue on the code. 
+
+ 2. Everything is Dockerize, so you can run it on Distributed System for Fault Tolerence System.
+
+ 3. We can add more Indexing and Sharding on Elastic Search for more performance. Also we can add more Kafka Brokers & Partitions for more fault tolerence. But for sake of this assignment, i'm keeping it simple. (Else my System Will 💥)
+
+
+ 3. I didn't add a **calendar** or **time picke**r because my CSS skills are not strong, and the messy CSS was not aesthetically pleasing. Therefore, if you need to query, please enter the **full timestamp** from start to end on both input box respectively. **[Format: "2023-09-10T00:00:00Z" ]**
+
+ 4. The Last Query Docker Container was not connecting with Host machine, i dont know why. I will figure that out soon, for meantime run the Query Server using `python3 query/app.py.`
+
+ 5. Yea that's it. Not got much time, but tired my best to submit this assignment. Contact me incase any issue on the code. 
 
  
 
